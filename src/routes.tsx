@@ -1,4 +1,5 @@
 import {
+  Outlet,
   createBrowserRouter
 } from "react-router-dom";
 
@@ -38,6 +39,14 @@ const Routes = createBrowserRouter([
         path: "users",
         element: <>Users</>
       },
+      {
+        path: "rpg",
+        element: <>RPG</>
+      },
+      {
+        path: "profile",
+        element: <>Profile</>
+      }
     ]
   },
 ]);
