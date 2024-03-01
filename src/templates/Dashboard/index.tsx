@@ -1,11 +1,9 @@
-import { Outlet, useNavigate, Navigate } from "react-router-dom";
+import { Outlet, Navigate } from "react-router-dom";
 import { Storage } from "@/services";
 
-import { Button } from "@/components/ui/button";
+import { Sidebar, Header } from "./components";
 
 const Dashboard = () => {
-  const navigate = useNavigate();
-
   const token = Storage.getAccessToken();
 
   if (!token) {
@@ -13,12 +11,15 @@ const Dashboard = () => {
   }
 
   return (
-    <>
-      Dashboard
-      <Button onClick={() => navigate("users")}>GO TO USERS</Button>
-      <Button onClick={() => navigate("")}>GO TO HOME</Button>
-      <Outlet />
-    </>
+    <div className="flex">
+      <Sidebar />
+      <div className="w-full flex flex-col">
+        <Header />
+        <div className="m-5">
+          <Outlet />
+        </div>
+      </div>
+    </div>
   )
 }
 

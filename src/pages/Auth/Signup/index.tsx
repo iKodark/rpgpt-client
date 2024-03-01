@@ -2,7 +2,7 @@ import { useForm, SubmitHandler } from "react-hook-form"
 
 import { Button } from "@/components/ui/button";
 import { Input } from '@/components/ui/input';
-import { InputPassword } from "@/components/ui/inputPassword";
+import { InputPassword } from "@/components/ui/input-password";
 import { toast } from "sonner"
 
 import { useNavigate } from "react-router-dom";
