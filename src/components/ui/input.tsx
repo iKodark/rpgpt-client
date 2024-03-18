@@ -1,11 +1,13 @@
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
+import { useFormContext } from "react-hook-form";
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "./form";
 
-export interface InputProps
+export interface FieldProps
   extends React.InputHTMLAttributes<HTMLInputElement> { }
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
+const Field = React.forwardRef<HTMLInputElement, FieldProps>(
   ({ className, type, ...props }, ref) => {
     return (
       <input
@@ -19,7 +21,51 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       />
     )
   }
+);
+
+export interface InputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+  name: string,
+  description?: string,
+  label?: string
+}
+
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ name, description, label, ...props }, ref) => {
+
+    const { control } = useFormContext();
+
+    return (
+      <FormField
+        control={control}
+        name={name}
+        render={({ field }) => (
+          <FormItem>
+            {
+              label && (
+                <FormLabel>
+                  {label}
+                </FormLabel>
+              )
+            }
+            <FormControl>
+              <Field {...field} {...props} ref={ref} />
+            </FormControl>
+            {
+              description && (
+                <FormDescription>
+                  {description}
+                </FormDescription>
+              )
+            }
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+    )
+  }
 )
+
 Input.displayName = "Input"
 
 export { Input }

@@ -10,7 +10,7 @@ const Auth = () => {
           <SwitchTheme />
         </div>
 
-        <div className="my-12">
+        <div className="my-6">
           <h1 className="text-9xl font-semibold text-center">RPGPT</h1>
         </div>
         <Outlet />

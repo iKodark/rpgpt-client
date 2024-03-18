@@ -1,4 +1,5 @@
-import { useForm, SubmitHandler } from "react-hook-form"
+import { useForm, SubmitHandler, FormProvider } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button } from "@/components/ui/button";
 import { Input } from '@/components/ui/input';
@@ -7,8 +8,10 @@ import { toast } from "sonner"
 
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
-import { Auth, Storage } from "../../../services";
+import { Auth, Storage } from "@/services";
 import { AxiosError, AxiosResponse } from "axios";
+
+import schema from "./schema";
 
 interface IFormInput {
   login: string,
@@ -18,11 +21,12 @@ interface IFormInput {
 const Signin = () => {
   const navigate = useNavigate();
 
-  const { register, handleSubmit } = useForm<IFormInput>({
+  const form = useForm<IFormInput>({
     defaultValues: {
       login: "",
       password: ""
-    }
+    },
+    resolver: zodResolver(schema)
   });
 
   const handleErrorSignin = (error: AxiosError) => {
@@ -62,35 +66,37 @@ const Signin = () => {
 
   return (
     <>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col space-y-5 border-2 rounded-none p-5 w-1/4"
-      >
-        <span className="text-3xl font-semibold text-center">Acesse sua conta</span>
-        <Input
-          placeholder="Insira seu e-mail/username"
-          type="text"
-          {...register("login")}
-        />
-        <InputPassword
-          placeholder="Insira sua senha"
-          {...register("password")}
-        />
-        <Button
-          type="button"
-          variant="link"
-          className="self-end"
-          onClick={handleClickRegister}
+      <FormProvider {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col space-y-5 border-2 rounded-none p-5 w-1/4"
         >
-          Crie sua conta
-        </Button>
-        <Button
-          type="submit"
-          className="p-5 rounded-none"
-        >
-          Acessar
-        </Button>
-      </form>
+          <span className="text-3xl font-semibold text-center">Acesse sua conta</span>
+          <Input
+            placeholder="Insira seu e-mail/username"
+            type="text"
+            name="login"
+          />
+          <InputPassword
+            placeholder="Insira sua senha"
+            name="password"
+          />
+          <Button
+            type="button"
+            variant="link"
+            className="self-end"
+            onClick={handleClickRegister}
+          >
+            Crie sua conta
+          </Button>
+          <Button
+            type="submit"
+            className="p-5 rounded-none"
+          >
+            Acessar
+          </Button>
+        </form>
+      </FormProvider>
     </>
   )
 }

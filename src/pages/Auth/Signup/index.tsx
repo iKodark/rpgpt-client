@@ -1,4 +1,5 @@
-import { useForm, SubmitHandler } from "react-hook-form"
+import { useForm, SubmitHandler, FormProvider } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button } from "@/components/ui/button";
 import { Input } from '@/components/ui/input';
@@ -7,8 +8,10 @@ import { toast } from "sonner"
 
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
-import { Auth, Storage } from "../../../services";
-import { AxiosError, AxiosResponse } from "axios";
+import { Auth } from "@/services";
+import { AxiosError } from "axios";
+
+import schema from "./schema";
 
 interface IFormInput {
   username: string,
@@ -20,13 +23,14 @@ interface IFormInput {
 const Signup = () => {
   const navigate = useNavigate();
 
-  const { register, handleSubmit } = useForm<IFormInput>({
+  const form = useForm<IFormInput>({
     defaultValues: {
       username: "",
       email: "",
       password: "",
       confirmPassword: "",
-    }
+    },
+    resolver: zodResolver(schema)
   });
 
   const handleErrorSignup = (error: AxiosError | any) => {
@@ -66,44 +70,50 @@ const Signup = () => {
 
   return (
     <>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col space-y-5 border-2 rounded-none p-5 w-1/4"
-      >
-        <span className="text-3xl font-semibold text-center">Crie sua conta</span>
-        <Input
-          placeholder="Insira um username"
-          type="text"
-          {...register("username")}
-        />
-        <Input
-          placeholder="Insira um e-mail"
-          type="text"
-          {...register("email")}
-        />
-        <InputPassword
-          placeholder="Insira uma senha"
-          {...register("password")}
-        />
-        <InputPassword
-          placeholder="Confirme sua senha"
-          {...register("confirmPassword")}
-        />
-        <Button
-          type="button"
-          variant="link"
-          className="self-end"
-          onClick={handleClickLogin}
+      <FormProvider {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col space-y-5 border-2 rounded-none p-5 w-1/4"
         >
-          Já tem uma conta? Acesse aqui
-        </Button>
-        <Button
-          type="submit"
-          className="p-5 rounded-none"
-        >
-          Criar conta
-        </Button>
-      </form>
+          <span className="text-3xl font-semibold text-center">Crie sua conta</span>
+          <Input
+            name="username"
+            label="Usuário"
+            placeholder="Insira um nome de usuário"
+            type="text"
+          />
+          <Input
+            name="email"
+            label="E-mail"
+            placeholder="name@host.com"
+            type="text"
+          />
+          <InputPassword
+            name="password"
+            label="Senha"
+            placeholder="Insira uma senha"
+          />
+          <InputPassword
+            name="confirmPassword"
+            label="Confirme sua senha"
+            placeholder="Confirme sua senha"
+          />
+          <Button
+            type="button"
+            variant="link"
+            className="self-end"
+            onClick={handleClickLogin}
+          >
+            Já tem uma conta? Acesse aqui
+          </Button>
+          <Button
+            type="submit"
+            className="p-5 rounded-none"
+          >
+            Criar conta
+          </Button>
+        </form>
+      </FormProvider>
     </>
   )
 }
