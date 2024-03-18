@@ -4,11 +4,13 @@ import { cn } from "@/lib/utils"
 
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff } from "lucide-react";
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "./form";
+import { useFormContext } from "react-hook-form";
 
-export interface InputPasswordProps
+export interface FieldProps
   extends React.InputHTMLAttributes<HTMLInputElement> { }
 
-const InputPassword = React.forwardRef<HTMLInputElement, InputPasswordProps>(
+const Field = React.forwardRef<HTMLInputElement, FieldProps>(
   ({ className, ...props }, ref) => {
 
     const [showPassword, setShowPassword] = React.useState<boolean>(false);
@@ -48,6 +50,50 @@ const InputPassword = React.forwardRef<HTMLInputElement, InputPasswordProps>(
     )
   }
 )
-InputPassword.displayName = "Input"
+
+export interface InputPasswordProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+  name: string,
+  description?: string,
+  label?: string
+}
+
+const InputPassword = React.forwardRef<HTMLInputElement, InputPasswordProps>(
+  ({ name, description, label, ...props }, ref) => {
+
+    const { control } = useFormContext();
+
+    return (
+      <FormField
+        control={control}
+        name={name}
+        render={({ field }) => (
+          <FormItem>
+            {
+              label && (
+                <FormLabel>
+                  {label}
+                </FormLabel>
+              )
+            }
+            <FormControl>
+              <Field {...field} {...props} ref={ref} />
+            </FormControl>
+            {
+              description && (
+                <FormDescription>
+                  {description}
+                </FormDescription>
+              )
+            }
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+    )
+  }
+)
+
+InputPassword.displayName = "InputPassword"
 
 export { InputPassword }

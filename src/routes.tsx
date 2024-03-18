@@ -1,6 +1,6 @@
 import {
-  Outlet,
-  createBrowserRouter
+  createBrowserRouter,
+  Outlet
 } from "react-router-dom";
 
 import {
@@ -9,7 +9,8 @@ import {
 } from "./templates";
 
 import {
-  Auth
+  Auth,
+  Rpg
 } from "./pages";
 
 const Routes = createBrowserRouter([
@@ -41,7 +42,17 @@ const Routes = createBrowserRouter([
       },
       {
         path: "rpg",
-        element: <>RPG</>
+        element: <Outlet />,
+        children: [
+          {
+            path: "",
+            element: <Rpg.Main />
+          },
+          {
+            path: "create",
+            element: <Rpg.Create />
+          }
+        ]
       },
       {
         path: "profile",

@@ -33,7 +33,7 @@ const Sidebar = () => {
     <div className="flex min-h-screen w-fit">
       <div
         className={cn(
-          "h-full shadow-md space-y-5 py-2 px-2 transition-[width] duration-1000",
+          "relative h-full shadow-md space-y-5 py-2 px-2 transition-[width] duration-1000",
           expanded ? "w-[300px]" : "w-[50px]"
         )}
       >
@@ -79,21 +79,15 @@ const Sidebar = () => {
             })
           }
         </div>
-      </div>
-      <div
-        className={cn(
-          "absolute flex items-center h-full transition-all duration-1000",
-          expanded ? "left-[calc(300px)]" : "left-[calc(50px)]"
-        )}
-      >
-        <div
-          className="flex items-center justify-center shadow-md h-14 w-5 rounded-br-full rounded-tr-full text-primary font-semibold"
+        <a
+          className={cn(
+            "absolute bottom-0 flex items-center space-x-4 px-6 py-1 font-medium text-zinc-500 hover:text-primary transition-colors duration-1000 cursor-pointer",
+            expanded ? "px-6 justify-end w-full" : "px-0 justify-center"
+          )}
           onClick={handleToggleExpanded}
         >
-          {
-            <ExpandedIcon size={16} strokeWidth={3} />
-          }
-        </div>
+          <ExpandedIcon size={24} strokeWidth={3} />
+        </a>
       </div>
     </div>
   )
